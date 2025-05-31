@@ -2,32 +2,49 @@ require('dotenv').config();
 
 const fs = require('fs');
 const path = require('path');
+
+function getCommandFiles(dir) {
+    const files = [];
+    const items = fs.readdirSync(dir, { withFileTypes: true });
+    
+    for (const item of items) {
+        const fullPath = path.join(dir, item.name);
+        if (item.isDirectory()) {
+            // Recursively scan subdirectories
+            files.push(...getCommandFiles(fullPath));
+        } else if (item.name.endsWith('.js')) {
+            // Add JavaScript files
+            files.push(fullPath);
+        }
+    }
+    return files;
+}
+
 const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const commandFiles = getCommandFiles(commandsPath);
 
 const { REST, Routes } = require('discord.js');
 const deployCommands = async () => {
     try {
         const commands = [];
-        const commandFiles = fs.readdirSync(path.join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
 
-        for (const file of commandFiles) {
-            const command = require(`./commands/${file}`);
+        for (const filePath of commandFiles) {
+            const command = require(filePath);
             if ('data' in command && 'execute' in command) {
-                console.log(`Registering command: ${command.data.name}`);
+                console.log(`Registering command: ${command.data.name} (from ${path.relative(__dirname, filePath)})`);
                 commands.push(command.data.toJSON());
             } else {
-                console.log(`The command at ${file} is missing a required "data" or "execute" property.`);
+                console.log(`The command at ${path.relative(__dirname, filePath)} is missing a required "data" or "execute" property.`);
             }
         }
 
-    const rest = new REST().setToken(process.env.BOT_TOKEN);
-    console.log(`Started refreshing ${commands.length} application (/) commands.`);
-    const data = await rest.put(
-        Routes.applicationCommands(process.env.CLIENT_ID),
-        { body: commands },
-    );
-    console.log('Sucessfully reloaded all commands!')
+        const rest = new REST().setToken(process.env.BOT_TOKEN);
+        console.log(`Started refreshing ${commands.length} application (/) commands.`);
+        const data = await rest.put(
+            Routes.applicationCommands(process.env.CLIENT_ID),
+            { body: commands },
+        );
+        console.log('Successfully reloaded all commands!')
     } catch (error) {
         console.error('Error deploying commands:', error);
     }
@@ -61,14 +78,14 @@ const client = new Client({
 
 client.commands = new Collection();
 
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
+for (const filePath of commandFiles) {
     const command = require(filePath);
 
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
+        console.log(`Loaded command: ${command.data.name} (from ${path.relative(__dirname, filePath)})`);
     } else {
-        console.log(`The command at ${filePath} is missing a required "data" or "execute" property.`);
+        console.log(`The command at ${path.relative(__dirname, filePath)} is missing a required "data" or "execute" property.`);
     }
 }
   
