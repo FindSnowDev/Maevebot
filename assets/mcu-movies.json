@@ -5,252 +5,288 @@
       "tmdbId": 1771,
       "releaseYear": 2011,
       "order": 1,
-      "phase": 1
+      "phase": 1,
+      "franchise": "mcu"
     },
     {
       "title": "Captain Marvel",
       "tmdbId": 299537,
       "releaseYear": 2019,
       "order": 2,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Iron Man",
       "tmdbId": 1726,
       "releaseYear": 2008,
       "order": 3,
-      "phase": 1
+      "phase": 1,
+      "franchise": "mcu"
     },
     {
       "title": "Iron Man 2",
       "tmdbId": 10138,
       "releaseYear": 2010,
       "order": 4,
-      "phase": 1
+      "phase": 1,
+      "franchise": "mcu"
     },
     {
       "title": "The Incredible Hulk",
       "tmdbId": 1724,
       "releaseYear": 2008,
       "order": 5,
-      "phase": 1
+      "phase": 1,
+      "franchise": "mcu"
     },
     {
       "title": "Thor",
       "tmdbId": 10195,
       "releaseYear": 2011,
       "order": 6,
-      "phase": 1
+      "phase": 1,
+      "franchise": "mcu"
     },
     {
       "title": "The Avengers",
       "tmdbId": 24428,
       "releaseYear": 2012,
       "order": 7,
-      "phase": 1
+      "phase": 1,
+      "franchise": "mcu"
     },
     {
       "title": "Iron Man 3",
       "tmdbId": 68721,
       "releaseYear": 2013,
       "order": 8,
-      "phase": 2
+      "phase": 2,
+      "franchise": "mcu"
     },
     {
       "title": "Thor: The Dark World",
       "tmdbId": 76338,
       "releaseYear": 2013,
       "order": 9,
-      "phase": 2
+      "phase": 2,
+      "franchise": "mcu"
     },
     {
       "title": "Captain America: The Winter Soldier",
       "tmdbId": 100402,
       "releaseYear": 2014,
       "order": 10,
-      "phase": 2
+      "phase": 2,
+      "franchise": "mcu"
     },
     {
       "title": "Guardians of the Galaxy",
       "tmdbId": 118340,
       "releaseYear": 2014,
       "order": 11,
-      "phase": 2
+      "phase": 2,
+      "franchise": "mcu"
     },
     {
       "title": "Guardians of the Galaxy Vol. 2",
       "tmdbId": 283995,
       "releaseYear": 2017,
       "order": 12,
-      "phase": 2
+      "phase": 2,
+      "franchise": "mcu"
     },
     {
       "title": "Avengers: Age of Ultron",
       "tmdbId": 99861,
       "releaseYear": 2015,
       "order": 13,
-      "phase": 2
+      "phase": 2,
+      "franchise": "mcu"
     },
     {
       "title": "Ant-Man",
       "tmdbId": 102899,
       "releaseYear": 2015,
       "order": 14,
-      "phase": 2
+      "phase": 2,
+      "franchise": "mcu"
     },
     {
       "title": "Captain America: Civil War",
       "tmdbId": 271110,
       "releaseYear": 2016,
       "order": 15,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Black Widow",
       "tmdbId": 497698,
       "releaseYear": 2021,
       "order": 16,
-      "phase": 4
+      "phase": 4,
+      "franchise": "mcu"
     },
     {
       "title": "Black Panther",
       "tmdbId": 284054,
       "releaseYear": 2018,
       "order": 17,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Spider-Man: Homecoming",
       "tmdbId": 315635,
       "releaseYear": 2017,
       "order": 18,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Doctor Strange",
       "tmdbId": 284052,
       "releaseYear": 2016,
       "order": 19,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Thor: Ragnarok",
       "tmdbId": 284053,
       "releaseYear": 2017,
       "order": 20,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Ant-Man and the Wasp",
       "tmdbId": 363088,
       "releaseYear": 2018,
       "order": 21,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Avengers: Infinity War",
       "tmdbId": 299536,
       "releaseYear": 2018,
       "order": 22,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Avengers: Endgame",
       "tmdbId": 299534,
       "releaseYear": 2019,
       "order": 23,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Spider-Man: Far From Home",
       "tmdbId": 429617,
       "releaseYear": 2019,
       "order": 24,
-      "phase": 3
+      "phase": 3,
+      "franchise": "mcu"
     },
     {
       "title": "Shang-Chi and the Legend of the Ten Rings",
       "tmdbId": 566525,
       "releaseYear": 2021,
       "order": 25,
-      "phase": 4
+      "phase": 4,
+      "franchise": "mcu"
     },
     {
       "title": "Eternals",
       "tmdbId": 524434,
       "releaseYear": 2021,
       "order": 26,
-      "phase": 4
+      "phase": 4,
+      "franchise": "mcu"
     },
     {
       "title": "Spider-Man: No Way Home",
       "tmdbId": 634649,
       "releaseYear": 2021,
       "order": 27,
-      "phase": 4
+      "phase": 4,
+      "franchise": "mcu"
     },
     {
       "title": "Doctor Strange in the Multiverse of Madness",
       "tmdbId": 453395,
       "releaseYear": 2022,
       "order": 28,
-      "phase": 4
+      "phase": 4,
+      "franchise": "mcu"
     },
     {
       "title": "Thor: Love and Thunder",
       "tmdbId": 616037,
       "releaseYear": 2022,
       "order": 29,
-      "phase": 4
+      "phase": 4,
+      "franchise": "mcu"
     },
     {
       "title": "Black Panther: Wakanda Forever",
       "tmdbId": 505642,
       "releaseYear": 2022,
       "order": 30,
-      "phase": 4
+      "phase": 4,
+      "franchise": "mcu"
     },
     {
       "title": "Ant-Man and the Wasp: Quantumania",
       "tmdbId": 640146,
       "releaseYear": 2023,
       "order": 31,
-      "phase": 5
+      "phase": 5,
+      "franchise": "mcu"
     },
     {
       "title": "Guardians of the Galaxy Vol. 3",
       "tmdbId": 447365,
       "releaseYear": 2023,
       "order": 32,
-      "phase": 5
+      "phase": 5,
+      "franchise": "mcu"
     },
     {
       "title": "The Marvels",
       "tmdbId": 609681,
       "releaseYear": 2023,
       "order": 33,
-      "phase": 5
+      "phase": 5,
+      "franchise": "mcu"
     },
     {
       "title": "Deadpool & Wolverine",
       "tmdbId": 533535,
       "releaseYear": 2024,
       "order": 34,
-      "phase": 5
+      "phase": 5,
+      "franchise": "mcu"
     },
     {
       "title": "Captain America: Brave New World",
       "tmdbId": 822119,
       "releaseYear": 2024,
       "order": 35,
-      "phase": 5
+      "phase": 5,
+      "franchise": "mcu"
     },
     {
       "title": "Thunderbolts",
       "tmdbId": 986056,
       "releaseYear": 2024,
       "order": 36,
-      "phase": 5
+      "phase": 5,
+      "franchise": "mcu"
     }
   ]
 }

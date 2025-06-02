@@ -9,11 +9,12 @@ module.exports = {
         .setDescription('Remove a movie from your watched list')
         .addStringOption(option =>
             option.setName('category')
-                .setDescription('Select a category')
+                .setDescription('Select a category/franchise')
                 .setRequired(true)
                 .addChoices(
                     { name: 'MCU', value: 'mcu' },
-                    // Adding more soon :-)
+                    { name: 'Final Destination', value: 'final-destination' },
+                    // Add more categories/franchises here or load dynamically when bot starts
                 ))
         .addStringOption(option =>
             option.setName('movie')
@@ -27,26 +28,24 @@ module.exports = {
             await interaction.deferReply({ ephemeral: true });
 
             const userId = interaction.user.id;
-            const category = interaction.options.getString('category');
+            const category = interaction.options.getString('category');  // franchise/category name
             const movieTitle = interaction.options.getString('movie');
 
-            if (category !== 'mcu') {
-                return await interaction.editReply('❌ Only the MCU category is supported right now.');
-            }
-
-            // finds the movie in MCU category (case insensitive)
+            // Find movie by title AND franchise/category, case insensitive
             const movie = await Movie.findOne({
-                where: where(
-                    fn('lower', col('title')),
-                    { [Op.like]: `%${movieTitle.toLowerCase()}%` }
-                )
+                where: {
+                    franchise: category,
+                    [Op.and]: where(
+                        fn('lower', col('title')),
+                        { [Op.like]: `%${movieTitle.toLowerCase()}%` }
+                    )
+                }
             });
 
             if (!movie) {
-                return await interaction.editReply(`❌ Movie "${movieTitle}" not found in the MCU database.`);
+                return await interaction.editReply(`❌ Movie "${movieTitle}" not found in the ${category} database.`);
             }
 
-            // checks if the movie is in the user's watched list
             const watchedEntry = await WatchedMovie.findOne({
                 where: {
                     userId,
@@ -58,7 +57,6 @@ module.exports = {
                 return await interaction.editReply(`❌ You have not marked **${movie.title}** as watched yet.`);
             }
 
-            // get rid of the watched entry
             await watchedEntry.destroy();
 
             const embed = new EmbedBuilder()
@@ -86,14 +84,16 @@ module.exports = {
             if (focusedOption.name === 'movie') {
                 const input = focusedOption.value;
                 const userId = interaction.user.id;
+                const category = interaction.options.getString('category');
 
-                // Fetch watched movies for this user (and MCU category only)
+                // Fetch watched movies filtered by user AND franchise/category AND partial title match
                 const watchedMovies = await WatchedMovie.findAll({
                     where: { userId },
                     include: [{
                         model: Movie,
                         as: 'movie',
                         where: {
+                            franchise: category,
                             title: {
                                 [Op.like]: `%${input}%`
                             }

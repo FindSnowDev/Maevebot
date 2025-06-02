@@ -7,8 +7,8 @@ const MOVIES_PER_PAGE = 10;
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('mcu')
-        .setDescription('Get a list of MCU movies'),
+        .setName('final-destination')
+        .setDescription('Get a list of the Final Destination movies'),
 
     async execute(interaction) {
         try {
@@ -16,7 +16,7 @@ module.exports = {
             const userId = interaction.user.id;
 
             // Fetch all movies in chronological order
-            const movies = await Movie.findAll({ where: { franchise: 'mcu' }, order: [['order', 'ASC']] });
+            const movies = await Movie.findAll({ where: { franchise: 'final-destination' }, order: [['order', 'ASC']] });
 
             // Get watched movies
             const watchedMovies = await WatchedMovie.findAll({ where: { userId } });
@@ -26,11 +26,11 @@ module.exports = {
             const userProgress = await UserProgress.findOne({ where: { userId } });
 
             if (movies.length === 0) {
-                return await interaction.editReply({ content: '❌ No MCU movies found in the database.' });
+                return await interaction.editReply({ content: '❌ No Final Destination movies found in the database.' });
             }
 
             const page = 0;
-            const embed = createMCUEmbed(movies, watchedMovieIds, userProgress?.currentMovieId, page);
+            const embed = createFinalDestinationEmbed(movies, watchedMovieIds, userProgress?.currentMovieId, page);
             const buttons = createNavigationButtons(page, movies.length);
 
             const response = await interaction.editReply({
@@ -44,7 +44,7 @@ module.exports = {
                 collector.on('collect', async (buttonInteraction) => {
                     if (buttonInteraction.user.id !== interaction.user.id) {
                         return buttonInteraction.reply({
-                            content: '❌ You can only interact with your own MCU list!',
+                            content: '❌ You can only interact with your own Final Destination list!',
                             ephemeral: true
                         });
                     }
@@ -53,7 +53,7 @@ module.exports = {
                     const pageNumber = parseInt(newPageStr);
                     if (isNaN(pageNumber)) return;
 
-                    const newEmbed = createMCUEmbed(movies, watchedMovieIds, userProgress?.currentMovieId, pageNumber);
+                    const newEmbed = createFinalDestinationEmbed(movies, watchedMovieIds, userProgress?.currentMovieId, pageNumber);
                     const newButtons = createNavigationButtons(pageNumber, movies.length);
 
                     await buttonInteraction.update({
@@ -71,8 +71,8 @@ module.exports = {
                 });
             }
         } catch (error) {
-            console.error('Error in MCU command:', error);
-            const errorMessage = '❌ An error occurred while fetching the MCU movie list.';
+            console.error('Error in Final Destination command:', error);
+            const errorMessage = '❌ An error occurred while fetching the Final Destination movie list.';
             if (interaction.deferred) {
                 await interaction.editReply({ content: errorMessage });
             } else {
@@ -82,14 +82,14 @@ module.exports = {
     }
 };
 
-function createMCUEmbed(movies, watchedMovieIds, currentMovieId, page) {
+function createFinalDestinationEmbed(movies, watchedMovieIds, currentMovieId, page) {
     const startIndex = page * MOVIES_PER_PAGE;
     const endIndex = Math.min(startIndex + MOVIES_PER_PAGE, movies.length);
     const pageMovies = movies.slice(startIndex, endIndex);
 
     const embed = new EmbedBuilder()
-        .setTitle('🎬 MCU Movies - Chronological Order')
-        .setColor('#E23636')
+        .setTitle('🎬 Final Destination Movies - Chronological Order')
+        .setColor('#0A2A66')
         .setFooter({
             text: `Page ${page + 1} of ${Math.ceil(movies.length / MOVIES_PER_PAGE)} • ${movies.length} total movies`
         });

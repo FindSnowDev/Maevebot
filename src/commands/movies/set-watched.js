@@ -9,12 +9,14 @@ module.exports = {
         .setDescription('Mark a movie as watched')
         .addStringOption(option =>
             option.setName('category')
-                .setDescription('Select a category')
+                .setDescription('Select a category/franchise')
                 .setRequired(true)
                 .addChoices(
                     { name: 'MCU', value: 'mcu' },
-                    // gonna add moreee..
-                ))
+                    { name: 'Final Destination', value: 'final-destination' },
+                    // adding more franchises gonna copy this line
+                )
+        )
         .addStringOption(option =>
             option.setName('movie')
                 .setDescription('Select the movie you watched')
@@ -30,23 +32,22 @@ module.exports = {
             const category = interaction.options.getString('category');
             const movieTitle = interaction.options.getString('movie');
 
-            if (category !== 'mcu') {
-                return await interaction.editReply('❌ Only the MCU category is supported right now.');
-            }
-
-            // find the movie in MCU category (case insensitive)
+            // Find the movie by title and franchise/category (case insensitive)
             const movie = await Movie.findOne({
-                where: where(
-                    fn('lower', col('title')),
-                    { [Op.like]: `%${movieTitle.toLowerCase()}%` }
-                )
+                where: {
+                    franchise: category,
+                    [Op.and]: where(
+                        fn('lower', col('title')),
+                        { [Op.like]: `%${movieTitle.toLowerCase()}%` }
+                    )
+                }
             });
 
             if (!movie) {
-                return await interaction.editReply(`❌ Movie "${movieTitle}" not found in the MCU database.`);
+                return await interaction.editReply(`❌ Movie "${movieTitle}" not found in the ${category} database.`);
             }
 
-            // Check if user already marked this movie as watched
+            // Check if already marked as watched
             const alreadyWatched = await WatchedMovie.findOne({
                 where: {
                     userId,
@@ -58,7 +59,7 @@ module.exports = {
                 return await interaction.editReply(`✅ You have already marked **${movie.title}** as watched.`);
             }
 
-            // marks movie as watched
+            // Mark as watched
             await WatchedMovie.create({
                 userId,
                 movieId: movie.id
@@ -88,19 +89,27 @@ module.exports = {
 
             if (focusedOption.name === 'movie') {
                 const input = focusedOption.value;
+                const category = interaction.options.getString('category');
 
-                // for now, only MCU supported
+                if (!category) {
+                    return await interaction.respond([]);
+                }
+
+                // Fetch movies filtered by category and input
                 const movies = await Movie.findAll({
-                    order: [['order', 'ASC']]
+                    where: {
+                        franchise: category,
+                        title: {
+                            [Op.like]: `%${input}%`
+                        }
+                    },
+                    order: [['order', 'ASC']],
+                    limit: 25
                 });
 
-                const filtered = movies
-                    .filter(m => m.title.toLowerCase().includes(input.toLowerCase()))
-                    .slice(0, 25);
-
-                const choices = filtered.map(m => ({
-                    name: `${m.order}. ${m.title} (${m.releaseYear})`,
-                    value: m.title
+                const choices = movies.map(movie => ({
+                    name: `${movie.order}. ${movie.title} (${movie.releaseYear})`,
+                    value: movie.title
                 }));
 
                 await interaction.respond(choices);

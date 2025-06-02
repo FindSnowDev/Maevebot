@@ -57,25 +57,41 @@ async function setupDatabase() {
 
 async function seedMovies() {
     try {
-        // Read the MCU movies JSON file
-        const moviesPath = path.join(__dirname, '..', '..', 'assets', 'mcu-movies.json');
-        const moviesData = JSON.parse(fs.readFileSync(moviesPath, 'utf8'));
+        const assetsDir = path.join(__dirname, '..', '..', 'assets');
         
-        // Insert movies into database
-        for (const movieData of moviesData.movies) {
+        // Get all JSON files in assets folder
+        const files = fs.readdirSync(assetsDir).filter(file => file.endsWith('.json'));
+        
+        let allMovies = [];
+        
+        for (const file of files) {
+            const filePath = path.join(assetsDir, file);
+            const fileData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            
+            // Assuming each JSON has a "movies" array
+            if (Array.isArray(fileData.movies)) {
+                allMovies = allMovies.concat(fileData.movies);
+            } else {
+                console.warn(`⚠️ Skipping ${file}, no "movies" array found.`);
+            }
+        }
+        
+        // Seed all movies
+        for (const movieData of allMovies) {
             await Movie.create({
                 title: movieData.title,
                 tmdbId: movieData.tmdbId,
                 releaseYear: movieData.releaseYear,
                 order: movieData.order,
                 phase: movieData.phase || null,
-                description: null // Will be fetched from TMDB when needed
+                franchise: movieData.franchise || null,
+                description: null
             });
             
             console.log(`  ✓ Added: ${movieData.title}`);
         }
         
-        console.log(`📊 Seeded ${moviesData.movies.length} movies.`);
+        console.log(`📊 Seeded ${allMovies.length} movies from ${files.length} files.`);
         
     } catch (error) {
         console.error('❌ Error seeding movies:', error);

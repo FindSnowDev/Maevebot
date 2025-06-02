@@ -21,11 +21,15 @@ const Movie = sequelize.define('Movie', {
     order: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
+        unique: false,
     },
     phase: {
         type: DataTypes.INTEGER,
         allowNull: true,
+    },
+    franchise: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 });
 

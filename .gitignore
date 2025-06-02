@@ -134,3 +134,13 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+.gradle/
+build/
+out/
+.idea/
+.vscode/
+run/
+.DS_Store
+*.iml
+logs/
