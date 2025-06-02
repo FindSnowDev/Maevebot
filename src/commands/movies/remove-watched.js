@@ -13,7 +13,7 @@ module.exports = {
                 .setRequired(true)
                 .addChoices(
                     { name: 'MCU', value: 'mcu' },
-                    // Add more categories here later if needed
+                    // Adding more soon :-)
                 ))
         .addStringOption(option =>
             option.setName('movie')
@@ -34,7 +34,7 @@ module.exports = {
                 return await interaction.editReply('❌ Only the MCU category is supported right now.');
             }
 
-            // Find the movie in MCU category (case insensitive)
+            // finds the movie in MCU category (case insensitive)
             const movie = await Movie.findOne({
                 where: where(
                     fn('lower', col('title')),
@@ -46,7 +46,7 @@ module.exports = {
                 return await interaction.editReply(`❌ Movie "${movieTitle}" not found in the MCU database.`);
             }
 
-            // Check if the movie is in the user's watched list
+            // checks if the movie is in the user's watched list
             const watchedEntry = await WatchedMovie.findOne({
                 where: {
                     userId,
@@ -58,7 +58,7 @@ module.exports = {
                 return await interaction.editReply(`❌ You have not marked **${movie.title}** as watched yet.`);
             }
 
-            // Remove the watched entry
+            // get rid of the watched entry
             await watchedEntry.destroy();
 
             const embed = new EmbedBuilder()
@@ -92,7 +92,7 @@ module.exports = {
                     where: { userId },
                     include: [{
                         model: Movie,
-                        as: 'movie',  // <-- Use alias as defined in your associations
+                        as: 'movie',
                         where: {
                             title: {
                                 [Op.like]: `%${input}%`
