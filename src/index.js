@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const fs = require('fs');
 const path = require('path');
+const { setupDatabase } = require('./utils/setupDatabase');
 
 function getCommandFiles(dir) {
     const files = [];
@@ -90,12 +91,21 @@ for (const filePath of commandFiles) {
 client.once(Events.ClientReady, async () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
+    // Setup database before deploying commands
+    try {
+        await setupDatabase();
+        console.log('Database setup complete.');
+    } catch (error) {
+        console.error('Failed to setup database:', error);
+        process.exit(1);
+    }
+
     await deployCommands();
     console.log('Commands deployed globally.');
 
     const statusType = process.env.BOT_STATUS || 'online';
     const activityType = process.env.BOT_ACTIVITY_TYPE || 'WATCHING';
-    const activityName = process.env.ACTIVITY_NAME || 'your messages';
+    const activityName = process.env.ACTIVITY_NAME || 'MCU movies';
 
     const activityTypeMap = {
         'PLAYING': ActivityType.Playing,
@@ -124,22 +134,37 @@ client.once(Events.ClientReady, async () => {
 });
 
 client.on(Events.InteractionCreate, async interaction => {
-    if (!interaction.isChatInputCommand()) return;
-    const command = client.commands.get(interaction.commandName);
+    if (interaction.isChatInputCommand()) {
+        const command = client.commands.get(interaction.commandName);
 
-    if (!command) {
-        console.error(`No command matching ${interaction.commandName} was found.`);
-        return;
+        if (!command) {
+            console.error(`No command matching ${interaction.commandName} was found.`);
+            return;
+        }
+
+        try {
+            await command.execute(interaction);
+        } catch (error) {
+            console.error(error)
+            if (interaction.replied || interaction.deferred) {
+                await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+            } else {
+                await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+            }
+        }
     }
+    
+    if (interaction.isAutocomplete()) {
+        const command = client.commands.get(interaction.commandName);
 
-    try {
-        await command.execute(interaction);
-    } catch (error) {
-        console.error(error)
-        if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
-        } else {
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+        if (!command || !command.autocomplete) {
+            return;
+        }
+
+        try {
+            await command.autocomplete(interaction);
+        } catch (error) {
+            console.error(`Error handling autocomplete for ${interaction.commandName}:`, error);
         }
     }
 });
