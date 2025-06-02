@@ -10,10 +10,8 @@ function getCommandFiles(dir) {
     for (const item of items) {
         const fullPath = path.join(dir, item.name);
         if (item.isDirectory()) {
-            // Recursively scan subdirectories
             files.push(...getCommandFiles(fullPath));
         } else if (item.name.endsWith('.js')) {
-            // Add JavaScript files
             files.push(fullPath);
         }
     }
@@ -92,7 +90,6 @@ for (const filePath of commandFiles) {
 client.once(Events.ClientReady, async () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
-    // deploying commands
     await deployCommands();
     console.log('Commands deployed globally.');
 
